@@ -24,10 +24,14 @@ import com.congdinh.hotelapp.dtos.room.RoomDTO;
 import com.congdinh.hotelapp.entities.RoomType;
 import com.congdinh.hotelapp.services.RoomService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/rooms")
+@Tag(name = "Rooms", description = "APIs for managing rooms")
 public class RoomsController {
     private final RoomService roomService;
     private final PagedResourcesAssembler<RoomDTO> pagedResourcesAssembler;
@@ -38,6 +42,8 @@ public class RoomsController {
     }
 
     @GetMapping
+    @Operation(summary = "Get all rooms")
+    @ApiResponse(responseCode = "200", description = "Return all rooms")
     public ResponseEntity<List<RoomDTO>> getAll() {
         var rooms = roomService.findAll();
         return ResponseEntity.ok(rooms);
@@ -45,6 +51,8 @@ public class RoomsController {
 
     // localhost:8080/api/v1/rooms/search?keyword=101
     @GetMapping("/searchByRoomNumber")
+    @Operation(summary = "Search rooms by room number")
+    @ApiResponse(responseCode = "200", description = "Return rooms that match the room number")
     public ResponseEntity<List<RoomDTO>> searchByRoomNumber(
             @RequestParam(required = false) String keyword) {
         var rooms = roomService.findByRoomNumber(keyword);
@@ -53,6 +61,8 @@ public class RoomsController {
 
     // localhost:8080/api/v1/rooms/search?type=DELUXE
     @GetMapping("/searchByRoomType")
+    @Operation(summary = "Search rooms by room type")
+    @ApiResponse(responseCode = "200", description = "Return rooms that match the room type")
     public ResponseEntity<List<RoomDTO>> searchByRoomType(
             @RequestParam(required = false) RoomType type) {
         var rooms = roomService.findByRoomType(type);
@@ -61,6 +71,8 @@ public class RoomsController {
 
     // localhost:8080/api/v1/rooms/search?keyword=101&page=0&size=10
     @GetMapping("/search")
+    @Operation(summary = "Search rooms with pagination")
+    @ApiResponse(responseCode = "200", description = "Return rooms that match the keyword with pagination")
     public ResponseEntity<?> searchPaginated(
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false, defaultValue = "number") String sortBy,
@@ -81,12 +93,17 @@ public class RoomsController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Get room by id")
+    @ApiResponse(responseCode = "200", description = "Return room that match the id")
     public ResponseEntity<RoomDTO> getById(@RequestParam String id) {
         var room = roomService.findById(id);
         return ResponseEntity.ok(room);
     }
 
     @PostMapping()
+    @Operation(summary = "Create new room")
+    @ApiResponse(responseCode = "200", description = "Return created room")
+    @ApiResponse(responseCode = "400", description = "Return error message if create failed")
     public ResponseEntity<?> create(@Valid @RequestBody RoomCreateUpdateDTO roomDTO,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -103,6 +120,9 @@ public class RoomsController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Update room by id")
+    @ApiResponse(responseCode = "200", description = "Return updated room")
+    @ApiResponse(responseCode = "400", description = "Return error message if update failed")
     public ResponseEntity<?> update(
             @PathVariable UUID id,
             @Valid @RequestBody RoomCreateUpdateDTO roomDTO,
@@ -121,6 +141,9 @@ public class RoomsController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Delete room by id")
+    @ApiResponse(responseCode = "200", description = "Return true if delete successfully")
+    @ApiResponse(responseCode = "400", description = "Return error message if delete failed")
     public ResponseEntity<?> delete(@PathVariable UUID id) {
 
         var result = roomService.delete(id);
