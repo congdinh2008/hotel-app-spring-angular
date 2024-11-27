@@ -5,10 +5,7 @@ import java.util.UUID;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 @Entity
 @Table(name = "rooms")
 public class Room {
@@ -24,4 +21,5 @@ public class Room {
     private int capacity;
 
     private double price;
+
 }

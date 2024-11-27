@@ -9,10 +9,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class RoomCreateUpdateDTO {
     @NotBlank(message = "Room Number is required")
     @Length(min = 2, max = 255, message = "Room Number must be between 2 and 255 characters")

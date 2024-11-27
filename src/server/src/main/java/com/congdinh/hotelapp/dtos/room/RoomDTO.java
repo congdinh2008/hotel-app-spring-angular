@@ -7,10 +7,8 @@ import com.congdinh.hotelapp.entities.RoomType;
 
 import lombok.*;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class RoomDTO {
     private UUID id;
 
