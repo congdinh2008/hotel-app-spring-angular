@@ -124,7 +124,8 @@ public class HotelServiceServiceImpl implements HotelServiceService {
         }
 
         // Update entity properties
-        service = hotelServiceMapper.toEntity(serviceDTO);
+        hotelServiceMapper.updateEntity(serviceDTO, service);
+        service.setId(id);
 
         service = hotelServiceRepository.save(service);
 

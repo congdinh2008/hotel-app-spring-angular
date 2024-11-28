@@ -140,7 +140,8 @@ public class UserServiceImpl implements UserService {
         }
 
         // Update entity properties
-        user = userMapper.toEntity(userDTO);
+        userMapper.updateEntity(userDTO, user);
+        user.setId(id);
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 
         user = userRepository.save(user);

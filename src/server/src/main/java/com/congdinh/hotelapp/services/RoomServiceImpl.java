@@ -144,8 +144,8 @@ public class RoomServiceImpl implements RoomService {
             throw new IllegalArgumentException("Room not found");
         }
 
-        // Update entity properties
-        room = roomMapper.toEntity(roomDTO);
+        roomMapper.updateEntity(roomDTO, room);
+        room.setId(id);
 
         room = roomRepository.save(room);
 

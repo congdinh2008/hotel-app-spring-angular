@@ -125,8 +125,8 @@ public class RoleServiceImpl implements RoleService {
             throw new IllegalArgumentException("Role not found");
         }
 
-        // Update entity properties
-        role = roleMapper.toEntity(roleDTO);
+        roleMapper.updateEntity(roleDTO, role);
+        role.setId(id);
 
         role = roleRepository.save(role);
 

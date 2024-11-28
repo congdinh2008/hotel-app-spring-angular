@@ -37,10 +37,10 @@ public class HotelServicesController {
     }
 
     // localhost:8080/api/v1/hotelServices/search?keyword=101
-    @GetMapping("/searchByHotelServiceNumber")
-    @Operation(summary = "Search hotelServices by hotelService number")
+    @GetMapping("/searchByHotelServiceName")
+    @Operation(summary = "Search hotelServices by hotel service name")
     @ApiResponse(responseCode = "200", description = "Return hotelServices that match the hotelService number")
-    public ResponseEntity<List<HotelServiceMasterDTO>> searchByHotelServiceNumber(
+    public ResponseEntity<List<HotelServiceMasterDTO>> searchByHotelServiceName(
             @RequestParam(required = false) String keyword) {
         var hotelServices = hotelServiceService.findByName(keyword);
         return ResponseEntity.ok(hotelServices);
@@ -108,7 +108,7 @@ public class HotelServicesController {
             return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         }
 
-        var updatedHotelService = hotelServiceService.create(hotelServiceDTO);
+        var updatedHotelService = hotelServiceService.update(id, hotelServiceDTO);
 
         if (updatedHotelService == null) {
             return ResponseEntity.badRequest().body("Failed to update hotel service");
