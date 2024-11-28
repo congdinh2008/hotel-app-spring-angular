@@ -44,7 +44,7 @@ public class HotelServiceServiceImpl implements HotelServiceService {
             if (keyword == null) {
                 return null;
             }
-            return cb.like(root.get("number"), "%" + keyword + "%");
+            return cb.like(root.get("name"), "%" + keyword + "%");
         };
 
         var services = hotelServiceRepository.findAll(spec);
@@ -63,7 +63,7 @@ public class HotelServiceServiceImpl implements HotelServiceService {
             if (keyword == null) {
                 return null;
             }
-            return cb.like(root.get("number"), "%" + keyword + "%");
+            return cb.like(root.get("name"), "%" + keyword + "%");
         };
 
         var services = hotelServiceRepository.findAll(spec, pageable);
@@ -90,7 +90,7 @@ public class HotelServiceServiceImpl implements HotelServiceService {
     @Override
     public HotelServiceMasterDTO create(HotelServiceCreateUpdateDTO serviceDTO) {
         if (serviceDTO == null) {
-            throw new IllegalArgumentException("ServiceMasterDTO is null");
+            throw new IllegalArgumentException("Service is null");
         }
 
         var existingService = hotelServiceRepository.findByName(serviceDTO.getName());
@@ -108,7 +108,7 @@ public class HotelServiceServiceImpl implements HotelServiceService {
     @Override
     public HotelServiceMasterDTO update(UUID id, HotelServiceCreateUpdateDTO serviceDTO) {
         if (serviceDTO == null) {
-            throw new IllegalArgumentException("ServiceMasterDTO is null");
+            throw new IllegalArgumentException("Service is null");
         }
 
         var existingService = hotelServiceRepository.findByName(serviceDTO.getName());
