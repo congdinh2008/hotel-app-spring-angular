@@ -14,7 +14,8 @@
             </div>
 
             <div class="card-footer flex justify-between p-3">
-                <button type="button" class="p-2 px-4 rounded-full bg-green-500 text-white">
+                <button type="button" class="p-2 px-4 rounded-full bg-green-500 text-white"
+                (click)="onCreate()">
                     <fa-icon [icon]="faPlus" /> Add
                 </button>
                 <button type="submit" class="p-2 px-4 rounded-full bg-blue-500 text-white">
@@ -43,10 +44,12 @@
                         <td>{{item.price}}</td>
                         <td>
                             <div class="flex justify-center gap-2">
-                                <button type="button" class=" text-blue-500" title="Edit">
+                                <button type="button" class=" text-blue-500" title="Edit"
+                                (click)="onEdit(item.id)">
                                     <fa-icon [icon]="faEdit" />
                                 </button>
-                                <button type="submit" class=" text-red-500" title="Delete">
+                                <button type="submit" class=" text-red-500" title="Delete"
+                                (click)="onDelete(item.id)">
                                     <fa-icon [icon]="faTrashCan" />
                                 </button>
                             </div>
@@ -58,5 +61,5 @@
     </div>
 
     <!-- Details -->
-    <app-hotel-service-details *ngIf="isShowDetails"></app-hotel-service-details>
+    <app-hotel-service-details *ngIf="isShowDetails" (cancel)="cancelDetail()" [selected-item]="selectedItem"></app-hotel-service-details>
 </section>
