@@ -58,8 +58,11 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
         }
 
         var user = new User();
+        user.setFirstName(registerRequestDTO.getFirstName());
+        user.setLastName(registerRequestDTO.getLastName());
         user.setUsername(registerRequestDTO.getUsername());
         user.setEmail(registerRequestDTO.getEmail());
+        user.setPhoneNumber(registerRequestDTO.getPhoneNumber());
         user.setPassword(passwordEncoder.encode(registerRequestDTO.getPassword()));
 
         userRepository.save(user);
