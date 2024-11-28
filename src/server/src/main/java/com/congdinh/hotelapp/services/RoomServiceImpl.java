@@ -12,6 +12,7 @@ import com.congdinh.hotelapp.dtos.room.RoomCreateUpdateDTO;
 import com.congdinh.hotelapp.dtos.room.RoomDTO;
 import com.congdinh.hotelapp.entities.Room;
 import com.congdinh.hotelapp.entities.RoomType;
+import com.congdinh.hotelapp.mapper.RoomMapper;
 import com.congdinh.hotelapp.repositories.RoomRepository;
 
 import jakarta.transaction.Transactional;
@@ -20,9 +21,11 @@ import jakarta.transaction.Transactional;
 @Transactional
 public class RoomServiceImpl implements RoomService {
     private final RoomRepository roomRepository;
+    private final RoomMapper roomMapper;
 
-    public RoomServiceImpl(RoomRepository roomRepository) {
+    public RoomServiceImpl(RoomRepository roomRepository, RoomMapper roomMapper) {
         this.roomRepository = roomRepository;
+        this.roomMapper = roomMapper;
     }
 
     @Override
@@ -31,13 +34,7 @@ public class RoomServiceImpl implements RoomService {
 
         // Convert entities to DTOs
         var roomDTOs = rooms.stream().map(room -> {
-            var roomDTO = new RoomDTO();
-            roomDTO.setId(room.getId());
-            roomDTO.setNumber(room.getNumber());
-            roomDTO.setType(room.getType());
-            roomDTO.setCapacity(room.getCapacity());
-            roomDTO.setPrice(room.getPrice());
-            return roomDTO;
+            return roomMapper.toDTO(room);
         }).toList();
 
         return roomDTOs;
@@ -45,7 +42,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public List<RoomDTO> findByRoomNumber(String keyword) {
-        Specification<Room> spec = (root, query, cb) -> {
+        Specification<Room> spec = (root, _, cb) -> {
             if (keyword == null) {
                 return null;
             }
@@ -56,13 +53,7 @@ public class RoomServiceImpl implements RoomService {
 
         // Convert entities to DTOs
         var roomDTOs = rooms.stream().map(room -> {
-            var roomDTO = new RoomDTO();
-            roomDTO.setId(room.getId());
-            roomDTO.setNumber(room.getNumber());
-            roomDTO.setType(room.getType());
-            roomDTO.setCapacity(room.getCapacity());
-            roomDTO.setPrice(room.getPrice());
-            return roomDTO;
+            return roomMapper.toDTO(room);
         }).toList();
 
         return roomDTOs;
@@ -70,7 +61,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public List<RoomDTO> findByRoomType(RoomType type) {
-        Specification<Room> spec = (root, query, cb) -> {
+        Specification<Room> spec = (root, _, cb) -> {
             if (type == null) {
                 return null;
             }
@@ -81,13 +72,7 @@ public class RoomServiceImpl implements RoomService {
 
         // Convert entities to DTOs
         var roomDTOs = rooms.stream().map(room -> {
-            var roomDTO = new RoomDTO();
-            roomDTO.setId(room.getId());
-            roomDTO.setNumber(room.getNumber());
-            roomDTO.setType(room.getType());
-            roomDTO.setCapacity(room.getCapacity());
-            roomDTO.setPrice(room.getPrice());
-            return roomDTO;
+            return roomMapper.toDTO(room);
         }).toList();
 
         return roomDTOs;
@@ -95,7 +80,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public Page<RoomDTO> findPaginated(String keyword, Pageable pageable) {
-        Specification<Room> spec = (root, query, cb) -> {
+        Specification<Room> spec = (root, _, cb) -> {
             if (keyword == null) {
                 return null;
             }
@@ -106,13 +91,7 @@ public class RoomServiceImpl implements RoomService {
 
         // Convert entities to DTOs
         var roomDTOs = rooms.map(room -> {
-            var roomDTO = new RoomDTO();
-            roomDTO.setId(room.getId());
-            roomDTO.setNumber(room.getNumber());
-            roomDTO.setType(room.getType());
-            roomDTO.setCapacity(room.getCapacity());
-            roomDTO.setPrice(room.getPrice());
-            return roomDTO;
+            return roomMapper.toDTO(room);
         });
 
         return roomDTOs;
@@ -126,14 +105,7 @@ public class RoomServiceImpl implements RoomService {
             return null;
         }
 
-        var roomDTO = new RoomDTO();
-        roomDTO.setId(room.getId());
-        roomDTO.setNumber(room.getNumber());
-        roomDTO.setType(room.getType());
-        roomDTO.setCapacity(room.getCapacity());
-        roomDTO.setPrice(room.getPrice());
-
-        return roomDTO;
+        return roomMapper.toDTO(room);
     }
 
     @Override
@@ -147,22 +119,11 @@ public class RoomServiceImpl implements RoomService {
             throw new IllegalArgumentException("Room number already exists");
         }
 
-        var room = new Room();
-        room.setNumber(roomDTO.getNumber());
-        room.setType(roomDTO.getType());
-        room.setCapacity(roomDTO.getCapacity());
-        room.setPrice(roomDTO.getPrice());
+        var room = roomMapper.toEntity(roomDTO);
 
         room = roomRepository.save(room);
 
-        var newRoomDTO = new RoomDTO();
-        newRoomDTO.setId(room.getId());
-        newRoomDTO.setNumber(room.getNumber());
-        newRoomDTO.setType(room.getType());
-        newRoomDTO.setCapacity(room.getCapacity());
-        newRoomDTO.setPrice(room.getPrice());
-
-        return newRoomDTO;
+        return roomMapper.toDTO(room);
     }
 
     @Override
@@ -184,22 +145,11 @@ public class RoomServiceImpl implements RoomService {
         }
 
         // Update entity properties
-        room.setNumber(roomDTO.getNumber());
-        room.setType(roomDTO.getType());
-        room.setCapacity(roomDTO.getCapacity());
-        room.setPrice(roomDTO.getPrice());
+        room = roomMapper.toEntity(roomDTO);
 
         room = roomRepository.save(room);
 
-        // Convert entity to DTO
-        var updatedRoomDTO = new RoomDTO();
-        updatedRoomDTO.setId(room.getId());
-        updatedRoomDTO.setNumber(room.getNumber());
-        updatedRoomDTO.setType(room.getType());
-        updatedRoomDTO.setCapacity(room.getCapacity());
-        updatedRoomDTO.setPrice(room.getPrice());
-
-        return updatedRoomDTO;
+        return roomMapper.toDTO(room);
     }
 
     @Override
