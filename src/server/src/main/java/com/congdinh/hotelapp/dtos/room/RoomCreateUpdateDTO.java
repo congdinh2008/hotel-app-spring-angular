@@ -2,6 +2,7 @@ package com.congdinh.hotelapp.dtos.room;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.congdinh.hotelapp.dtos.MasterCreateUpdateDTO;
 import com.congdinh.hotelapp.entities.RoomType;
 
 import jakarta.validation.constraints.Min;
@@ -9,9 +10,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-public class RoomCreateUpdateDTO {
+public class RoomCreateUpdateDTO extends MasterCreateUpdateDTO {
     @NotBlank(message = "Room Number is required")
     @Length(min = 2, max = 255, message = "Room Number must be between 2 and 255 characters")
     private String number;

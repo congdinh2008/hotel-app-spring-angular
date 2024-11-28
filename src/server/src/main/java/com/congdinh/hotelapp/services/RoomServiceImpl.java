@@ -9,7 +9,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.congdinh.hotelapp.dtos.room.RoomCreateUpdateDTO;
-import com.congdinh.hotelapp.dtos.room.RoomDTO;
+import com.congdinh.hotelapp.dtos.room.RoomMasterDTO;
 import com.congdinh.hotelapp.entities.Room;
 import com.congdinh.hotelapp.entities.RoomType;
 import com.congdinh.hotelapp.mapper.RoomMapper;
@@ -29,19 +29,19 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<RoomDTO> findAll() {
+    public List<RoomMasterDTO> findAll() {
         var rooms = roomRepository.findAll();
 
         // Convert entities to DTOs
         var roomDTOs = rooms.stream().map(room -> {
-            return roomMapper.toDTO(room);
+            return roomMapper.toMasterDTO(room);
         }).toList();
 
         return roomDTOs;
     }
 
     @Override
-    public List<RoomDTO> findByRoomNumber(String keyword) {
+    public List<RoomMasterDTO> findByRoomNumber(String keyword) {
         Specification<Room> spec = (root, _, cb) -> {
             if (keyword == null) {
                 return null;
@@ -53,14 +53,14 @@ public class RoomServiceImpl implements RoomService {
 
         // Convert entities to DTOs
         var roomDTOs = rooms.stream().map(room -> {
-            return roomMapper.toDTO(room);
+            return roomMapper.toMasterDTO(room);
         }).toList();
 
         return roomDTOs;
     }
 
     @Override
-    public List<RoomDTO> findByRoomType(RoomType type) {
+    public List<RoomMasterDTO> findByRoomType(RoomType type) {
         Specification<Room> spec = (root, _, cb) -> {
             if (type == null) {
                 return null;
@@ -72,14 +72,14 @@ public class RoomServiceImpl implements RoomService {
 
         // Convert entities to DTOs
         var roomDTOs = rooms.stream().map(room -> {
-            return roomMapper.toDTO(room);
+            return roomMapper.toMasterDTO(room);
         }).toList();
 
         return roomDTOs;
     }
 
     @Override
-    public Page<RoomDTO> findPaginated(String keyword, Pageable pageable) {
+    public Page<RoomMasterDTO> findPaginated(String keyword, Pageable pageable) {
         Specification<Room> spec = (root, _, cb) -> {
             if (keyword == null) {
                 return null;
@@ -91,27 +91,27 @@ public class RoomServiceImpl implements RoomService {
 
         // Convert entities to DTOs
         var roomDTOs = rooms.map(room -> {
-            return roomMapper.toDTO(room);
+            return roomMapper.toMasterDTO(room);
         });
 
         return roomDTOs;
     }
 
     @Override
-    public RoomDTO findById(String id) {
+    public RoomMasterDTO findById(String id) {
         var room = roomRepository.findById(UUID.fromString(id)).orElse(null);
 
         if (room == null) {
             return null;
         }
 
-        return roomMapper.toDTO(room);
+        return roomMapper.toMasterDTO(room);
     }
 
     @Override
-    public RoomDTO create(RoomCreateUpdateDTO roomDTO) {
+    public RoomMasterDTO create(RoomCreateUpdateDTO roomDTO) {
         if (roomDTO == null) {
-            throw new IllegalArgumentException("RoomDTO is null");
+            throw new IllegalArgumentException("RoomMasterDTO is null");
         }
 
         var existingRoom = roomRepository.findByNumber(roomDTO.getNumber());
@@ -123,13 +123,13 @@ public class RoomServiceImpl implements RoomService {
 
         room = roomRepository.save(room);
 
-        return roomMapper.toDTO(room);
+        return roomMapper.toMasterDTO(room);
     }
 
     @Override
-    public RoomDTO update(UUID id, RoomCreateUpdateDTO roomDTO) {
+    public RoomMasterDTO update(UUID id, RoomCreateUpdateDTO roomDTO) {
         if (roomDTO == null) {
-            throw new IllegalArgumentException("RoomDTO is null");
+            throw new IllegalArgumentException("RoomMasterDTO is null");
         }
 
         var existingRoom = roomRepository.findByNumber(roomDTO.getNumber());
@@ -149,7 +149,7 @@ public class RoomServiceImpl implements RoomService {
 
         room = roomRepository.save(room);
 
-        return roomMapper.toDTO(room);
+        return roomMapper.toMasterDTO(room);
     }
 
     @Override

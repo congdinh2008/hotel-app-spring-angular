@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.congdinh.hotelapp.dtos.room.RoomCreateUpdateDTO;
-import com.congdinh.hotelapp.dtos.room.RoomDTO;
+import com.congdinh.hotelapp.dtos.room.RoomMasterDTO;
 import com.congdinh.hotelapp.entities.RoomType;
 import com.congdinh.hotelapp.services.RoomService;
 
@@ -34,9 +34,9 @@ import jakarta.validation.Valid;
 @Tag(name = "Rooms", description = "APIs for managing rooms")
 public class RoomsController {
     private final RoomService roomService;
-    private final PagedResourcesAssembler<RoomDTO> pagedResourcesAssembler;
+    private final PagedResourcesAssembler<RoomMasterDTO> pagedResourcesAssembler;
 
-    public RoomsController(RoomService roomService, PagedResourcesAssembler<RoomDTO> pagedResourcesAssembler) {
+    public RoomsController(RoomService roomService, PagedResourcesAssembler<RoomMasterDTO> pagedResourcesAssembler) {
         this.roomService = roomService;
         this.pagedResourcesAssembler = pagedResourcesAssembler;
     }
@@ -44,7 +44,7 @@ public class RoomsController {
     @GetMapping
     @Operation(summary = "Get all rooms")
     @ApiResponse(responseCode = "200", description = "Return all rooms")
-    public ResponseEntity<List<RoomDTO>> getAll() {
+    public ResponseEntity<List<RoomMasterDTO>> getAll() {
         var rooms = roomService.findAll();
         return ResponseEntity.ok(rooms);
     }
@@ -53,7 +53,7 @@ public class RoomsController {
     @GetMapping("/searchByRoomNumber")
     @Operation(summary = "Search rooms by room number")
     @ApiResponse(responseCode = "200", description = "Return rooms that match the room number")
-    public ResponseEntity<List<RoomDTO>> searchByRoomNumber(
+    public ResponseEntity<List<RoomMasterDTO>> searchByRoomNumber(
             @RequestParam(required = false) String keyword) {
         var rooms = roomService.findByRoomNumber(keyword);
         return ResponseEntity.ok(rooms);
@@ -63,7 +63,7 @@ public class RoomsController {
     @GetMapping("/searchByRoomType")
     @Operation(summary = "Search rooms by room type")
     @ApiResponse(responseCode = "200", description = "Return rooms that match the room type")
-    public ResponseEntity<List<RoomDTO>> searchByRoomType(
+    public ResponseEntity<List<RoomMasterDTO>> searchByRoomType(
             @RequestParam(required = false) RoomType type) {
         var rooms = roomService.findByRoomType(type);
         return ResponseEntity.ok(rooms);
@@ -95,7 +95,7 @@ public class RoomsController {
     @GetMapping("/{id}")
     @Operation(summary = "Get room by id")
     @ApiResponse(responseCode = "200", description = "Return room that match the id")
-    public ResponseEntity<RoomDTO> getById(@RequestParam String id) {
+    public ResponseEntity<RoomMasterDTO> getById(@RequestParam String id) {
         var room = roomService.findById(id);
         return ResponseEntity.ok(room);
     }
