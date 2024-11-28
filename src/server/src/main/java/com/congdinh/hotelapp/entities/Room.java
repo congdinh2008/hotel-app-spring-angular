@@ -1,18 +1,14 @@
 package com.congdinh.hotelapp.entities;
 
-import java.util.UUID;
-
 import jakarta.persistence.*;
 import lombok.*;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "rooms")
-public class Room {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-
+public class Room extends MasterEntityBase {
+   
     @Column(columnDefinition = "NVARCHAR(255)", nullable = false, unique = true)
     private String number;
 
@@ -21,5 +17,4 @@ public class Room {
     private int capacity;
 
     private double price;
-
 }
