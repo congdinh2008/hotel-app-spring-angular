@@ -33,6 +33,12 @@
 		<springdoc.version>2.5.0</springdoc.version>
 	</properties>
 	<dependencies>
+		<!-- JWT Dependencies -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.12.6</version>
+		</dependency>
 		<!-- MapStruct -->
 		<dependency>
 			<groupId>org.mapstruct</groupId>
