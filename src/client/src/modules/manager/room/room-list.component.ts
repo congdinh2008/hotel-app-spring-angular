@@ -56,7 +56,7 @@ export class RoomListComponent {
   public searchForm!: FormGroup;
   public data: any[] = [];
 
-  private apiUrl: string = `http://localhost:8080/api/v1/rooms/search`;
+  private apiUrl: string = `http://localhost:8080/api/v1/rooms`;
 
   constructor(private httpClient: HttpClient) {}
 
@@ -93,6 +93,7 @@ export class RoomListComponent {
   }
 
   public onDelete(id: string): void {
+    this.apiUrl = `http://localhost:8080/api/v1/rooms`;
     this.httpClient.delete(`${this.apiUrl}/${id}`).subscribe((result: any) => {
       if (result) {
         this.search();
