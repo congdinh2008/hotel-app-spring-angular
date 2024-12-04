@@ -22,11 +22,12 @@ import {
   faAngleLeft,
 } from '@fortawesome/free-solid-svg-icons';
 import { RoomDetailsComponent } from './room-details/room-details.component';
+import { TableComponent } from '../../../core/components/table/table.component';
 
 @Component({
   selector: 'app-room-list',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FontAwesomeModule, RoomDetailsComponent],
+  imports: [CommonModule, ReactiveFormsModule, FontAwesomeModule, RoomDetailsComponent, TableComponent],
   templateUrl: './room-list.component.html',
   styleUrl: './room-list.component.css',
 })
@@ -55,6 +56,14 @@ export class RoomListComponent {
 
   public searchForm!: FormGroup;
   public data: any[] = [];
+
+  public configColumns: any[] = [
+    { name: 'number', title: 'Number' },
+    { name: 'capacity', title: 'Capacity' },
+    { name: 'price', title: 'Price' },
+    { name: 'type', title: 'Type' },
+    { name: 'active', title: 'Active' },
+  ];
 
   private apiUrl: string = `http://localhost:8080/api/v1/rooms`;
 

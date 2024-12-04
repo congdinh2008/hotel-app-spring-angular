@@ -27,7 +27,9 @@
     <!-- List -->
     <div class="card border border-slate-400 rounded-md my-3">
         <div class="card-body p-3">
-            <table class="w-full">
+            <app-table [isShowNumber]="false" [data]="data" [columns]="configColumns" (edit)="onEdit($event)"
+                (delete)="onDelete($event)"></app-table>
+            <!-- <table class="w-full">
                 <thead>
                     <tr class="*:border *:border-slate-300 *:p-2">
                         <th class="p-2">No</th>
@@ -60,7 +62,7 @@
                         </td>
                     </tr>
                 </tbody>
-            </table>
+            </table> -->
         </div>
         <div class="card-footer p-3 border-t border-slate-300 pagination flex justify-between items-center">
             <!-- Select Page Size -->

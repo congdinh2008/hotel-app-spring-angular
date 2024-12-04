@@ -1,0 +1,27 @@
+<table class="w-full">
+    <thead>
+        <tr class="*:border *:border-slate-300 *:p-2">
+            <th class="p-2" *ngIf="isShowNumber">No</th>
+            <th class="p-2" *ngFor="let item of columns">{{item.title}}</th>
+            <th class="p-2">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of data; let i = index" class="*:border *:border-slate-300 *:p-2">
+            <td *ngIf="isShowNumber">{{i + 1}}</td>
+            <td *ngFor="let column of columns">
+                {{item[column.name]}}
+            </td>
+            <td>
+                <div class="flex justify-center gap-2">
+                    <button type="button" class=" text-blue-500" title="Edit" (click)="onEdit(item.id)">
+                        <fa-icon [icon]="faEdit" />
+                    </button>
+                    <button type="submit" class=" text-red-500" title="Delete" (click)="onDelete(item.id)">
+                        <fa-icon [icon]="faTrashCan" />
+                    </button>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>

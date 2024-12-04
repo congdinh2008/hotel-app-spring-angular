@@ -18,6 +18,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { TableComponent } from '../../../core/components/table/table.component';
 
 @Component({
   selector: 'app-hotel-service-list',
@@ -27,6 +28,7 @@ import { HttpClient } from '@angular/common/http';
     HotelServiceDetailsComponent,
     FontAwesomeModule,
     ReactiveFormsModule,
+    TableComponent
   ],
   templateUrl: './hotel-service-list.component.html',
   styleUrl: './hotel-service-list.component.css',
@@ -42,6 +44,12 @@ export class HotelServiceListComponent implements OnInit {
 
   public searchForm!: FormGroup;
   public data: any[] = [];
+
+  public configColumns: any[] = [
+    { name: 'name', title: 'Service Name' },
+    { name: 'price', title: 'Price' },
+    { name: 'active', title: 'Active' },
+  ];
 
   private apiUrl: string = 'http://localhost:8080/api/v1/hotel-services';
 
