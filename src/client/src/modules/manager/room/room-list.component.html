@@ -40,7 +40,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let item of data._embedded.roomMasterDTOList; let i = index"
+                    <tr *ngFor="let item of data; let i = index"
                         class="*:border *:border-slate-300 *:p-2">
                         <td>{{i + 1}}</td>
                         <td>{{item.number}}</td>
@@ -63,6 +63,7 @@
             </table>
         </div>
         <div class="card-footer p-3 border-t border-slate-300 pagination flex justify-between items-center">
+            <!-- Select Page Size -->
             <div class="page-size">
                 <label for="page-size">Page Size: </label>
                 <select id="page-size" class="border border-slate-400 rounded-md p-2"
@@ -70,6 +71,8 @@
                     <option *ngFor="let item of pageSizeList" [value]="item">{{item}}</option>
                 </select>
             </div>
+
+            <!-- Pagination -->
             <div class="page-items">
                 <ul class="pagination-list flex justify-center items-center gap-2">
                     <li class="pagination-item">
@@ -115,6 +118,8 @@
 
                 </ul>
             </div>
+
+            <!-- Page Detail Information -->
             <div class="page-details">
                 <!-- 1 or size + 1 -->
                 <span>{{pageNumber * pageSize + 1}}</span> -

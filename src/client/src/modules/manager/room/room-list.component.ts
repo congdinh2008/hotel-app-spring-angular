@@ -25,11 +25,7 @@ import {
 @Component({
   selector: 'app-room-list',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    FontAwesomeModule,
-  ],
+  imports: [CommonModule, ReactiveFormsModule, FontAwesomeModule],
   templateUrl: './room-list.component.html',
   styleUrl: './room-list.component.css',
 })
@@ -57,7 +53,7 @@ export class RoomListComponent {
   public faAngleDoubleRight: IconDefinition = faAngleDoubleRight;
 
   public searchForm!: FormGroup;
-  public data: any;
+  public data: any[] = [];
 
   private apiUrl: string = `http://localhost:8080/api/v1/rooms/search`;
 
@@ -71,12 +67,13 @@ export class RoomListComponent {
   private search(): void {
     this.apiUrl = `http://localhost:8080/api/v1/rooms/search?page=${this.currentPageNumber}&size=${this.currentPageSize}`;
     this.httpClient.get(this.apiUrl).subscribe((data: any) => {
-      this.data = data;
+      // Chi assign data._embedded.roomMasterDTOList cho data
+      this.data = data._embedded.roomMasterDTOList;
       // Update pagination properties
-      this.totalElements = this.data.page.totalElements;
-      this.totalPages = this.data.page.totalPages;
-      this.pageNumber = this.data.page.number;
-      this.pageSize = this.data.page.size;
+      this.totalElements = data.page.totalElements;
+      this.totalPages = data.page.totalPages;
+      this.pageNumber = data.page.number;
+      this.pageSize = data.page.size;
     });
   }
 
@@ -107,9 +104,7 @@ export class RoomListComponent {
 
   public onEdit(id: string): void {
     this.isShowDetails = false;
-    this.selectedItem = this.data._embedded.roomMasterDTOList.find(
-      (item: any) => item.id === id
-    );
+    this.selectedItem = this.data.find((item: any) => item.id === id);
     this.isShowDetails = true;
   }
 
