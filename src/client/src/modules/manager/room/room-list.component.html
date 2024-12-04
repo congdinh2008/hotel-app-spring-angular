@@ -132,6 +132,9 @@
             </div>
         </div>
     </div>
+
+    <!-- Details -->
+    <app-room-details *ngIf="isShowDetails" (cancel)="cancelDetail()" [selected-item]="selectedItem"></app-room-details>
 </section>
 
 <!-- 0 1 2 3 4 5 6 7 => pageLimit = 2

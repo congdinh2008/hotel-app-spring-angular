@@ -21,11 +21,12 @@ import {
   faAngleDoubleLeft,
   faAngleLeft,
 } from '@fortawesome/free-solid-svg-icons';
+import { RoomDetailsComponent } from './room-details/room-details.component';
 
 @Component({
   selector: 'app-room-list',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FontAwesomeModule],
+  imports: [CommonModule, ReactiveFormsModule, FontAwesomeModule, RoomDetailsComponent],
   templateUrl: './room-list.component.html',
   styleUrl: './room-list.component.css',
 })
