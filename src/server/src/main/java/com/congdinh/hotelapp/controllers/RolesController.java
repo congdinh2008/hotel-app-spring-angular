@@ -57,13 +57,12 @@ public class RolesController {
         return ResponseEntity.ok(roles);
     }
 
-
     @GetMapping("/search")
     @Operation(summary = "Search roles with pagination")
     @ApiResponse(responseCode = "200", description = "Return roles that match the keyword with pagination")
     public ResponseEntity<?> searchPaginated(
             @RequestParam(required = false) String keyword,
-            @RequestParam(required = false, defaultValue = "number") String sortBy,
+            @RequestParam(required = false, defaultValue = "name") String sortBy,
             @RequestParam(required = false, defaultValue = "asc") String order,
             @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "10") int size) {
@@ -119,7 +118,7 @@ public class RolesController {
             return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         }
 
-        var updatedRole = roleService.create(roleDTO);
+        var updatedRole = roleService.update(id, roleDTO);
 
         if (updatedRole == null) {
             return ResponseEntity.badRequest().body("Failed to update role");

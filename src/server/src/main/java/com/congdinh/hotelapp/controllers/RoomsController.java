@@ -131,7 +131,7 @@ public class RoomsController {
             return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         }
 
-        var updatedRoom = roomService.create(roomDTO);
+        var updatedRoom = roomService.update(id, roomDTO);
 
         if (updatedRoom == null) {
             return ResponseEntity.badRequest().body("Failed to update room");

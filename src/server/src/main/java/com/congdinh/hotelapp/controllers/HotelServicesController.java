@@ -52,7 +52,7 @@ public class HotelServicesController {
     @ApiResponse(responseCode = "200", description = "Return hotel service that match the keyword with pagination")
     public ResponseEntity<?> searchPaginated(
             @RequestParam(required = false) String keyword,
-            @RequestParam(required = false, defaultValue = "number") String sortBy,
+            @RequestParam(required = false, defaultValue = "name") String sortBy,
             @RequestParam(required = false, defaultValue = "asc") String order,
             @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "10") int size) {

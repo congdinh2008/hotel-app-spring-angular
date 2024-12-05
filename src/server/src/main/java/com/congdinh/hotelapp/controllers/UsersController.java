@@ -62,7 +62,7 @@ public class UsersController {
     @ApiResponse(responseCode = "200", description = "Return users that match the keyword with pagination")
     public ResponseEntity<?> searchPaginated(
             @RequestParam(required = false) String keyword,
-            @RequestParam(required = false, defaultValue = "number") String sortBy,
+            @RequestParam(required = false, defaultValue = "username") String sortBy,
             @RequestParam(required = false, defaultValue = "asc") String order,
             @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "10") int size) {
@@ -118,7 +118,7 @@ public class UsersController {
             return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         }
 
-        var updatedUser = userService.create(userDTO);
+        var updatedUser = userService.update(id, userDTO);
 
         if (updatedUser == null) {
             return ResponseEntity.badRequest().body("Failed to update user");
