@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import {
   FormGroup,
   FormControl,
@@ -14,6 +13,8 @@ import {
 import { faPlus, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { RoomDetailsComponent } from './room-details/room-details.component';
 import { TableComponent } from '../../../core/components/table/table.component';
+import { ROOM_SERVICE } from '../../../constants/injection.constant';
+import { IRoomService } from '../../../services/room-service.interface';
 
 @Component({
   selector: 'app-room-list',
@@ -53,9 +54,7 @@ export class RoomListComponent {
     { name: 'active', title: 'Active' },
   ];
 
-  private apiUrl: string = `http://localhost:8080/api/v1/rooms`;
-
-  constructor(private httpClient: HttpClient) {}
+  constructor(@Inject(ROOM_SERVICE) private roomService: IRoomService) {}
 
   ngOnInit(): void {
     this.createForm();
@@ -63,8 +62,13 @@ export class RoomListComponent {
   }
 
   public search(): void {
-    this.apiUrl = `http://localhost:8080/api/v1/rooms/search?page=${this.currentPageNumber}&size=${this.currentPageSize}`;
-    this.httpClient.get(this.apiUrl).subscribe((data: any) => {
+    const params = {
+      keyword: this.searchForm.value.keyword,
+      page: this.currentPageNumber,
+      size: this.currentPageSize,
+    };
+
+    this.roomService.search(params).subscribe((data: any) => {
       // Chi assign data._embedded.roomMasterDTOList cho data
       this.data = data._embedded.roomMasterDTOList;
       // Update pagination properties
@@ -82,13 +86,11 @@ export class RoomListComponent {
     if (this.searchForm.invalid) {
       return;
     }
-    this.apiUrl = `http://localhost:8080/api/v1/rooms/search?page=${this.currentPageNumber}&keyword=${this.searchForm.value.keyword}`;
     this.search();
   }
 
   public onDelete(id: string): void {
-    this.apiUrl = `http://localhost:8080/api/v1/rooms`;
-    this.httpClient.delete(`${this.apiUrl}/${id}`).subscribe((result: any) => {
+    this.roomService.delete(id).subscribe((result: any) => {
       if (result) {
         this.search();
         console.log('Delete success');
