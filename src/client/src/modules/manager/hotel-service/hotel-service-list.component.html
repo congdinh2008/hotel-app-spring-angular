@@ -14,8 +14,7 @@
             </div>
 
             <div class="card-footer flex justify-between p-3">
-                <button type="button" class="p-2 px-4 rounded-full bg-green-500 text-white"
-                (click)="onCreate()">
+                <button type="button" class="p-2 px-4 rounded-full bg-green-500 text-white" (click)="onCreate()">
                     <fa-icon [icon]="faPlus" /> Add
                 </button>
                 <button type="submit" class="p-2 px-4 rounded-full bg-blue-500 text-white">
@@ -26,13 +25,12 @@
     </div>
 
     <!-- List -->
-    <div class="card border border-slate-400 rounded-md my-3">
-        <div class="card-body p-3">
-            <app-table [isShowNumber]="false" [data]="data" [columns]="configColumns" (edit)="onEdit($event)"
-                (delete)="onDelete($event)"></app-table>
-        </div>
-    </div>
+    <app-table [isShowNumber]="true" [data]="data" [columns]="configColumns" [pageInfo]="pageInfo"
+        [page-size-list]="pageSizeList" [page-limit]="pageLimit" (onChangePageNumber)="onChangePageNumber($event)"
+        (onChangePageSize)="onChangePageSize($event)" (edit)="onEdit($event)" (delete)="onDelete($event)"></app-table>
+
 
     <!-- Details -->
-    <app-hotel-service-details *ngIf="isShowDetails" (cancel)="cancelDetail()" [selected-item]="selectedItem"></app-hotel-service-details>
+    <app-hotel-service-details *ngIf="isShowDetails" (cancel)="cancelDetail()"
+        [selected-item]="selectedItem"></app-hotel-service-details>
 </section>

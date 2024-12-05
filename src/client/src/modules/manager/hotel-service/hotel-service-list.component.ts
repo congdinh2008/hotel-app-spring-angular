@@ -28,7 +28,7 @@ import { TableComponent } from '../../../core/components/table/table.component';
     HotelServiceDetailsComponent,
     FontAwesomeModule,
     ReactiveFormsModule,
-    TableComponent
+    TableComponent,
   ],
   templateUrl: './hotel-service-list.component.html',
   styleUrl: './hotel-service-list.component.css',
@@ -41,6 +41,13 @@ export class HotelServiceListComponent implements OnInit {
   public faSearch: IconDefinition = faSearch;
   public faEdit: IconDefinition = faEdit;
   public faTrashCan: IconDefinition = faTrashCan;
+
+  // Pagination Properties
+  public pageSizeList: number[] = [10, 20, 50, 100];
+  public pageLimit: number = 2;
+  public currentPageNumber: number = 0;
+  public currentPageSize: number = 10;
+  public pageInfo: any;
 
   public searchForm!: FormGroup;
   public data: any[] = [];
@@ -61,8 +68,12 @@ export class HotelServiceListComponent implements OnInit {
   }
 
   private search(): void {
+    this.apiUrl = `http://localhost:8080/api/v1/hotel-services/search?keyword=${this.searchForm.value.keyword}&page=${this.currentPageNumber}&size=${this.currentPageSize}`;
     this.httpClient.get(this.apiUrl).subscribe((data: any) => {
-      this.data = data;
+      // Chi assign data._embedded.roomMasterDTOList cho data
+      this.data = data._embedded.hotelServiceMasterDTOList;
+      // Update pagination properties
+      this.pageInfo = data.page;
     });
   }
 
@@ -76,11 +87,11 @@ export class HotelServiceListComponent implements OnInit {
     if (this.searchForm.invalid) {
       return;
     }
-    this.apiUrl = `http://localhost:8080/api/v1/hotel-services/searchByHotelServiceName?keyword=${this.searchForm.value.keyword}`;
     this.search();
   }
 
   public onDelete(id: string): void {
+    this.apiUrl = `${this.apiUrl}`;
     this.httpClient.delete(`${this.apiUrl}/${id}`).subscribe((result: any) => {
       if (result) {
         this.search();
@@ -92,6 +103,7 @@ export class HotelServiceListComponent implements OnInit {
   }
 
   public onEdit(id: string): void {
+    this.apiUrl = `${this.apiUrl}`;
     this.isShowDetails = false;
     this.selectedItem = this.data.find((item) => item.id === id);
     this.isShowDetails = true;
@@ -104,6 +116,17 @@ export class HotelServiceListComponent implements OnInit {
 
   public cancelDetail(): void {
     this.isShowDetails = false;
+    this.search();
+  }
+
+  // Pagination Methods
+  public onChangePageSize(pageSize: any): void {
+    this.currentPageSize = pageSize;
+    this.search();
+  }
+
+  public onChangePageNumber(pageNumber: number): void {
+    this.currentPageNumber = pageNumber;
     this.search();
   }
 }
