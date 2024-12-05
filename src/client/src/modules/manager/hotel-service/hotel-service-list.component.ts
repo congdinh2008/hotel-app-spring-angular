@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { HotelServiceDetailsComponent } from './hotel-service-details/hotel-service-details.component';
 import { CommonModule } from '@angular/common';
 import {
@@ -17,8 +17,9 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { TableComponent } from '../../../core/components/table/table.component';
+import { IHotelServiceService } from '../../../services/hotel-service.interface';
+import { HOTEL_SERVICE_SERVICE } from '../../../constants/injection.constant';
 
 @Component({
   selector: 'app-hotel-service-list',
@@ -58,9 +59,10 @@ export class HotelServiceListComponent implements OnInit {
     { name: 'active', title: 'Active' },
   ];
 
-  private apiUrl: string = 'http://localhost:8080/api/v1/hotel-services';
-
-  constructor(private httpClient: HttpClient) {}
+  constructor(
+    @Inject(HOTEL_SERVICE_SERVICE)
+    private hotelServiceService: IHotelServiceService
+  ) {}
 
   ngOnInit(): void {
     this.createForm();
@@ -68,8 +70,12 @@ export class HotelServiceListComponent implements OnInit {
   }
 
   private search(): void {
-    this.apiUrl = `http://localhost:8080/api/v1/hotel-services/search?keyword=${this.searchForm.value.keyword}&page=${this.currentPageNumber}&size=${this.currentPageSize}`;
-    this.httpClient.get(this.apiUrl).subscribe((data: any) => {
+    const params = {
+      keyword: this.searchForm.value.keyword,
+      page: this.currentPageNumber,
+      size: this.currentPageSize,
+    };
+    this.hotelServiceService.search(params).subscribe((data: any) => {
       // Chi assign data._embedded.roomMasterDTOList cho data
       this.data = data._embedded.hotelServiceMasterDTOList;
       // Update pagination properties
@@ -91,8 +97,7 @@ export class HotelServiceListComponent implements OnInit {
   }
 
   public onDelete(id: string): void {
-    this.apiUrl = `${this.apiUrl}`;
-    this.httpClient.delete(`${this.apiUrl}/${id}`).subscribe((result: any) => {
+    this.hotelServiceService.delete(id).subscribe((result: any) => {
       if (result) {
         this.search();
         console.log('Delete success');
@@ -103,7 +108,6 @@ export class HotelServiceListComponent implements OnInit {
   }
 
   public onEdit(id: string): void {
-    this.apiUrl = `${this.apiUrl}`;
     this.isShowDetails = false;
     this.selectedItem = this.data.find((item) => item.id === id);
     this.isShowDetails = true;
