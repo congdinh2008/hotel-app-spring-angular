@@ -18,7 +18,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { TableComponent } from '../../../core/components/table/table.component';
-import { IHotelServiceService } from '../../../services/hotel-service.interface';
+import { IHotelServiceService } from '../../../services/hotel-service/hotel-service.interface';
 import { HOTEL_SERVICE_SERVICE } from '../../../constants/injection.constant';
 
 @Component({

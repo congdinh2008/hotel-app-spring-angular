@@ -14,7 +14,7 @@ import { faPlus, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { RoomDetailsComponent } from './room-details/room-details.component';
 import { TableComponent } from '../../../core/components/table/table.component';
 import { ROOM_SERVICE } from '../../../constants/injection.constant';
-import { IRoomService } from '../../../services/room-service.interface';
+import { IRoomService } from '../../../services/room/room-service.interface';
 
 @Component({
   selector: 'app-room-list',
