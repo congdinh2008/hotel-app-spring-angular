@@ -8,7 +8,7 @@
     </thead>
     <tbody>
         <tr *ngFor="let item of data; let i = index" class="*:border *:border-slate-300 *:p-2">
-            <td *ngIf="isShowNumber">{{i + 1}}</td>
+            <td *ngIf="isShowNumber">{{pageNumber * pageSize + i + 1}}</td>
             <td *ngFor="let column of columns">
                 {{item[column.name]}}
             </td>

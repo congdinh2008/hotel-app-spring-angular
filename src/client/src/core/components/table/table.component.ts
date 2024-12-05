@@ -11,8 +11,11 @@ import { faEdit, faTrashCan } from '@fortawesome/free-solid-svg-icons';
   styleUrl: './table.component.css',
 })
 export class TableComponent {
+  @Input() pageNumber: number = 0;
+  @Input() pageSize: number = 10;
+  @Input() totalElements: number = 0;
   @Input() isShowNumber: boolean = false;
-  
+
   @Input() data: any[] = [];
 
   @Input() columns: any[] = [];
