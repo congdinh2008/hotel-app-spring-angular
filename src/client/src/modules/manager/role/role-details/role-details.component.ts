@@ -1,9 +1,22 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
-import { FontAwesomeModule, IconDefinition } from '@fortawesome/angular-fontawesome';
-import { faCancel, faSave, faRotateLeft } from '@fortawesome/free-solid-svg-icons';
+import { Component, EventEmitter, Inject, Input, Output } from '@angular/core';
+import {
+  FormGroup,
+  FormControl,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import {
+  FontAwesomeModule,
+  IconDefinition,
+} from '@fortawesome/angular-fontawesome';
+import {
+  faCancel,
+  faSave,
+  faRotateLeft,
+} from '@fortawesome/free-solid-svg-icons';
+import { ROLE_SERVICE } from '../../../../constants/injection.constant';
+import { IRoleService } from '../../../../services/role/role-service.interface';
 
 @Component({
   selector: 'app-role-details',
@@ -41,14 +54,14 @@ export class RoleDetailsComponent {
   @Output() cancel: EventEmitter<void> = new EventEmitter<void>();
 
   public isEdit: boolean = false;
-  private apiUrl: string = 'http://localhost:8080/api/v1/roles';
+  
   public form!: FormGroup;
 
   public faCancel: IconDefinition = faCancel;
   public faSave: IconDefinition = faSave;
   public faRotateLeft: IconDefinition = faRotateLeft;
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(@Inject(ROLE_SERVICE) private roleService: IRoleService) {}
 
   ngOnInit(): void {
     this.createForm();
@@ -62,18 +75,12 @@ export class RoleDetailsComponent {
 
   private createForm(): void {
     this.form = new FormGroup({
-      number: new FormControl('', [
+      name: new FormControl('', [
         Validators.required,
         Validators.minLength(2),
         Validators.maxLength(255),
       ]),
-      type: new FormControl('', [
-        Validators.required,
-        Validators.minLength(2),
-        Validators.maxLength(255),
-      ]),
-      capacity: new FormControl('', [Validators.required, Validators.min(0)]),
-      price: new FormControl('', [Validators.required, Validators.min(0)]),
+      description: new FormControl('', [Validators.maxLength(500)]),
       active: new FormControl(true),
     });
   }
@@ -88,18 +95,18 @@ export class RoleDetailsComponent {
     const data = this.form.value;
 
     if (this.isEdit) {
-      this.httpClient
-        .put(`${this.apiUrl}/${this.selectedItem.id}`, data)
-        .subscribe((result: any) => {
-          if (result) {
-            console.log('Update success');
-            this.cancel.emit();
-          } else {
-            console.log('Update failed');
-          }
-        });
+      Object.assign(data, { id: this.selectedItem.id });
+
+      this.roleService.update(data).subscribe((result: any) => {
+        if (result) {
+          console.log('Update success');
+          this.cancel.emit();
+        } else {
+          console.log('Update failed');
+        }
+      });
     } else {
-      this.httpClient.post(this.apiUrl, data).subscribe((result: any) => {
+      this.roleService.create(data).subscribe((result: any) => {
         console.log(result);
         if (result != null) {
           this.cancel.emit();
