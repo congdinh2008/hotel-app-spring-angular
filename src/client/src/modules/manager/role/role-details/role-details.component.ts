@@ -17,6 +17,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { ROLE_SERVICE } from '../../../../constants/injection.constant';
 import { IRoleService } from '../../../../services/role/role-service.interface';
+import { catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-role-details',
@@ -54,7 +55,7 @@ export class RoleDetailsComponent {
   @Output() cancel: EventEmitter<void> = new EventEmitter<void>();
 
   public isEdit: boolean = false;
-  
+
   public form!: FormGroup;
 
   public faCancel: IconDefinition = faCancel;
@@ -97,14 +98,25 @@ export class RoleDetailsComponent {
     if (this.isEdit) {
       Object.assign(data, { id: this.selectedItem.id });
 
-      this.roleService.update(data).subscribe((result: any) => {
-        if (result) {
-          console.log('Update success');
-          this.cancel.emit();
-        } else {
-          console.log('Update failed');
-        }
-      });
+      // Co gang thuc thi API update
+      this.roleService
+        .update(data)
+        .pipe(
+          // Neu co loi xay ra thi se tra ve null
+          catchError((error) => {
+            console.log(error);
+            return of(null);
+          })
+        )
+        // Lang nghe ket qua tra ve
+        .subscribe((result: any) => {
+          if (result) {
+            console.log('Update success');
+            this.cancel.emit();
+          } else {
+            console.log('Update failed');
+          }
+        });
     } else {
       this.roleService.create(data).subscribe((result: any) => {
         console.log(result);
