@@ -37,6 +37,7 @@ public class SecurityConfiguration {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowCredentials(true);
+        // Allow 4200 and 3000 ports for development
         config.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
         config.addAllowedHeader("*"); // X-Requested-With, Content-Type, Authorization, Origin, Accept
         config.addAllowedMethod("*"); // GET, POST, PUT, DELETE, PATCH, OPTIONS

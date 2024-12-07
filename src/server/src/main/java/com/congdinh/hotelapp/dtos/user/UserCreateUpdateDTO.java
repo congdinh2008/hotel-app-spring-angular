@@ -29,7 +29,7 @@ public class UserCreateUpdateDTO extends MasterCreateUpdateDTO {
 
     @NotBlank(message = "Phone Number is required")
     @Length(min = 10, max = 20, message = "Phone Number must be between 10 and 20 characters")
-    private String phone;
+    private String phoneNumber;
 
     @NotBlank(message = "password is required")
     @Length(min = 8, max = 20, message = "Password must be between 8 and 20 characters")

@@ -30,5 +30,5 @@ public class UserMasterDTO extends MasterDTO {
 
     @NotBlank(message = "Phone is required")
     @Length(min = 2, max = 20, message = "Phone must be between 2 and 20 characters")
-    private String phone;
+    private String phoneNumber;
 }
