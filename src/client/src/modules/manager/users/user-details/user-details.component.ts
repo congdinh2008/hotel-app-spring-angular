@@ -15,7 +15,7 @@ import {
   faSave,
   faRotateLeft,
 } from '@fortawesome/free-solid-svg-icons';
-import { ROLE_SERVICE } from '../../../../constants/injection.constant';
+import { ROLE_SERVICE, USER_SERVICE } from '../../../../constants/injection.constant';
 import { IUserService } from '../../../../services/user/user-service.interface';
 
 @Component({
@@ -27,12 +27,6 @@ import { IUserService } from '../../../../services/user/user-service.interface';
 })
 export class UserDetailsComponent {
   private _selectedItem!: any;
-
-  public userTypeList: any[] = [
-    { id: 'Standard', name: 'Standard' },
-    { id: 'Deluxe', name: 'Deluxe' },
-    { id: 'Suite', name: 'Suite' },
-  ];
 
   @Input('selected-item') set selectedItem(value: any) {
     if (value != null) {
@@ -54,14 +48,14 @@ export class UserDetailsComponent {
   @Output() cancel: EventEmitter<void> = new EventEmitter<void>();
 
   public isEdit: boolean = false;
-  
+
   public form!: FormGroup;
 
   public faCancel: IconDefinition = faCancel;
   public faSave: IconDefinition = faSave;
   public faRotateLeft: IconDefinition = faRotateLeft;
 
-  constructor(@Inject(ROLE_SERVICE) private userService: IUserService) {}
+  constructor(@Inject(USER_SERVICE) private userService: IUserService) {}
 
   ngOnInit(): void {
     this.createForm();
@@ -75,17 +69,51 @@ export class UserDetailsComponent {
 
   private createForm(): void {
     this.form = new FormGroup({
-      name: new FormControl('', [
+      firstName: new FormControl('', [
         Validators.required,
         Validators.minLength(2),
         Validators.maxLength(255),
       ]),
-      description: new FormControl('', [Validators.maxLength(500)]),
+      lastName: new FormControl('', [
+        Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(255),
+      ]),
+      username: new FormControl('', [
+        Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(50),
+      ]),
+      email: new FormControl('', [
+        Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(50),
+      ]),
+      phoneNumber: new FormControl('', [
+        Validators.required,
+        Validators.minLength(10),
+        Validators.maxLength(20),
+      ]),
+      password: new FormControl('', [
+        Validators.required,
+        Validators.minLength(10),
+        Validators.maxLength(20),
+      ]),
+      confirmPassword: new FormControl('', [
+        Validators.required,
+        Validators.minLength(10),
+        Validators.maxLength(20),
+      ]),
       active: new FormControl(true),
     });
   }
 
   public onSubmit(): void {
+    // Compare password and confirmPassword
+    if (this.form.value.password !== this.form.value.confirmPassword) {
+      return;
+    }
+
     // Validate form
     if (this.form.invalid) {
       return;

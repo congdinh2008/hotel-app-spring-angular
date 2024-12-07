@@ -7,20 +7,47 @@
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
             <div class="card-body p-3 border-y border-slate-400">
                 <div class="row flex mb-3 gap-2">
-                    <div class="form-group w-full">
-                        <label for="name" class="block mb-2">Name</label>
-                        <input type="text" id="name" formControlName="name"
+                    <div class="form-group w-1/2">
+                        <label for="firstName" class="block mb-2">First Name</label>
+                        <input type="text" id="firstName" formControlName="firstName"
+                            class="w-full p-2 border border-slate-400 rounded-md" />
+                    </div>
+                    <div class="form-group w-1/2">
+                        <label for="lastName" class="block mb-2">Last Name</label>
+                        <input type="text" id="lastName" formControlName="lastName"
                             class="w-full p-2 border border-slate-400 rounded-md" />
                     </div>
                 </div>
                 <div class="row flex mb-3 gap-2">
-                    <div class="form-group w-full">
-                        <label for="capacity" class="block mb-2">Description</label>
-                        <textarea id="description" formControlName="description" title="Description"
-                            class="w-full p-2 border border-slate-400 rounded-md"></textarea>
+                    <div class="form-group w-1/2">
+                        <label for="username" class="block mb-2">User Name</label>
+                        <input type="text" id="username" formControlName="username"
+                            class="w-full p-2 border border-slate-400 rounded-md" />
+                    </div>
+                    <div class="form-group w-1/2">
+                        <label for="email" class="block mb-2">Email</label>
+                        <input type="email" id="email" formControlName="email"
+                            class="w-full p-2 border border-slate-400 rounded-md" />
                     </div>
                 </div>
                 <div class="row flex mb-3 gap-2">
+                    <div class="form-group w-1/2">
+                        <label for="password" class="block mb-2">Password</label>
+                        <input type="password" id="password" formControlName="password"
+                            class="w-full p-2 border border-slate-400 rounded-md" />
+                    </div>
+                    <div class="form-group w-1/2">
+                        <label for="confirmPassword" class="block mb-2">Confirm Password</label>
+                        <input type="password" id="confirmPassword" formControlName="confirmPassword"
+                            class="w-full p-2 border border-slate-400 rounded-md" />
+                    </div>
+                </div>
+                <div class="row flex mb-3 gap-2">
+                    <div class="form-group w-1/2">
+                        <label for="phoneNumber" class="block mb-2">Phone Number</label>
+                        <input type="text" id="phoneNumber" formControlName="phoneNumber"
+                            class="w-full p-2 border border-slate-400 rounded-md" />
+                    </div>
                     <div class="form-group w-1/2">
                         <label for="active" class="block mb-2">Is Active</label>
                         <input type="checkbox" id="active" formControlName="active"
