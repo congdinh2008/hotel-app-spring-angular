@@ -75,11 +75,11 @@ export class HotelServiceListComponent implements OnInit {
       page: this.currentPageNumber,
       size: this.currentPageSize,
     };
-    this.hotelServiceService.search(params).subscribe((data: any) => {
-      // Chi assign data._embedded.roomMasterDTOList cho data
-      this.data = data._embedded.hotelServiceMasterDTOList;
+    this.hotelServiceService.search(params).subscribe((res: any) => {
+      // Chi assign res.data cho data
+      this.data = res.data;
       // Update pagination properties
-      this.pageInfo = data.page;
+      this.pageInfo = res.page;
     });
   }
 

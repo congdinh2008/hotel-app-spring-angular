@@ -66,11 +66,11 @@ export class RoleListComponent {
       size: this.currentPageSize,
     };
 
-    this.roleService.search(params).subscribe((data: any) => {
-      // Chi assign data._embedded.roleMasterDTOList cho data
-      this.data = data._embedded.roleMasterDTOList;
+    this.roleService.search(params).subscribe((res: any) => {
+      // Chi assign res.data cho data
+      this.data = res.data;
       // Update pagination properties
-      this.pageInfo = data.page;
+      this.pageInfo = res.page;
     });
   }
 

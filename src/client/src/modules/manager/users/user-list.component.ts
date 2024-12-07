@@ -69,11 +69,11 @@ export class UserListComponent {
       size: this.currentPageSize,
     };
 
-    this.userService.search(params).subscribe((data: any) => {
-      // Chi assign data._embedded.userMasterDTOList cho data
-      this.data = data._embedded.userMasterDTOList;
+    this.userService.search(params).subscribe((res: any) => {
+      // Chi assign res.data cho data
+      this.data = res.data;
       // Update pagination properties
-      this.pageInfo = data.page;
+      this.pageInfo = res.page;
     });
   }
 

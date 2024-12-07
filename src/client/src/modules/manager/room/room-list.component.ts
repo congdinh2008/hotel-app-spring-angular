@@ -68,11 +68,11 @@ export class RoomListComponent {
       size: this.currentPageSize,
     };
 
-    this.roomService.search(params).subscribe((data: any) => {
-      // Chi assign data._embedded.roomMasterDTOList cho data
-      this.data = data._embedded.roomMasterDTOList;
+    this.roomService.search(params).subscribe((res: any) => {
+      // Chi assign res.data cho data
+      this.data = res.data;
       // Update pagination properties
-      this.pageInfo = data.page;
+      this.pageInfo = res.page;
     });
   }
 
