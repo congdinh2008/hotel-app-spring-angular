@@ -1,5 +1,6 @@
 package com.congdinh.hotelapp.controllers;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -7,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,9 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.congdinh.hotelapp.dtos.hotelservice.HotelServiceMasterDTO;
 import com.congdinh.hotelapp.dtos.room.RoomCreateUpdateDTO;
 import com.congdinh.hotelapp.dtos.room.RoomMasterDTO;
 import com.congdinh.hotelapp.entities.RoomType;
+import com.congdinh.hotelapp.mapper.CustomPagedResponse;
 import com.congdinh.hotelapp.services.RoomService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -89,7 +93,16 @@ public class RoomsController {
 
         var rooms = roomService.findPaginated(keyword, pageable);
 
-        return ResponseEntity.ok(pagedResourcesAssembler.toModel(rooms));
+        var pagedModel = pagedResourcesAssembler.toModel(rooms);
+
+        // Get data, page, and links from pagedModel
+        Collection<EntityModel<RoomMasterDTO>> data = pagedModel.getContent();
+
+        var links = pagedModel.getLinks();
+
+        var response = new CustomPagedResponse<EntityModel<RoomMasterDTO>>(data, pagedModel.getMetadata(), links);
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")

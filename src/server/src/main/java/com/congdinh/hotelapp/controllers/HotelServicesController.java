@@ -4,11 +4,14 @@ import java.util.*;
 
 import org.springframework.data.domain.*;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import com.congdinh.hotelapp.dtos.hotelservice.*;
+import com.congdinh.hotelapp.dtos.user.UserMasterDTO;
+import com.congdinh.hotelapp.mapper.CustomPagedResponse;
 import com.congdinh.hotelapp.services.HotelServiceService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -66,7 +69,16 @@ public class HotelServicesController {
 
         var hotelServices = hotelServiceService.findPaginated(keyword, pageable);
 
-        return ResponseEntity.ok(pagedResourcesAssembler.toModel(hotelServices));
+        var pagedModel = pagedResourcesAssembler.toModel(hotelServices);
+
+        // Get data, page, and links from pagedModel
+        Collection<EntityModel<HotelServiceMasterDTO>> data = pagedModel.getContent();
+
+        var links = pagedModel.getLinks();
+
+        var response = new CustomPagedResponse<EntityModel<HotelServiceMasterDTO>>(data, pagedModel.getMetadata(), links);
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
