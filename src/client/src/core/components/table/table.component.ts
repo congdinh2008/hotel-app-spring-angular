@@ -12,6 +12,9 @@ import {
   faEdit,
   faTrashCan,
 } from '@fortawesome/free-solid-svg-icons';
+import { PageInfo } from '../../../models/search-response.model';
+
+type PageInfoOrNull = PageInfo | null;
 
 @Component({
   selector: 'app-table',
@@ -30,8 +33,8 @@ export class TableComponent {
     return this._pageLimit;
   }
 
-  private _pageInfo: any;
-  @Input() public set pageInfo(value: any) {
+  private _pageInfo!: PageInfoOrNull;
+  @Input() public set pageInfo(value: PageInfo) {
     if (value) {
       this._pageInfo = value;
       this.currentPageNumber = value.number;
@@ -44,7 +47,7 @@ export class TableComponent {
     }
   }
 
-  public get pageInfo(): any {
+  public get pageInfo(): PageInfoOrNull {
     return this._pageInfo;
   }
 

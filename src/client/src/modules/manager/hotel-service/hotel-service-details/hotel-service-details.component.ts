@@ -1,12 +1,10 @@
-import { HttpClient } from '@angular/common/http';
 import {
   Component,
   EventEmitter,
+  Inject,
   Input,
-  OnChanges,
   OnInit,
   Output,
-  SimpleChanges,
 } from '@angular/core';
 import {
   FormControl,
@@ -23,7 +21,11 @@ import {
   faRotateLeft,
   faSave,
 } from '@fortawesome/free-solid-svg-icons';
+import { HOTEL_SERVICE_SERVICE } from '../../../../constants/injection.constant';
+import { IHotelServiceService } from '../../../../services/hotel-service/hotel-service.interface';
+import { HotelServiceMasterDTO } from '../../../../models/hotel-service/hotel-service-master-dto.model';
 
+type HotelServiceMasterDTOOrNull = HotelServiceMasterDTO | null | undefined;
 @Component({
   selector: 'app-hotel-service-details',
   standalone: true,
@@ -32,9 +34,9 @@ import {
   styleUrl: './hotel-service-details.component.css',
 })
 export class HotelServiceDetailsComponent implements OnInit {
-  private _selectedItem!: any;
+  private _selectedItem!: HotelServiceMasterDTOOrNull;
 
-  @Input('selected-item') set selectedItem(value: any) {
+  @Input('selected-item') set selectedItem(value: HotelServiceMasterDTOOrNull) {
     if (value != null) {
       this._selectedItem = value;
       this.isEdit = true;
@@ -47,26 +49,29 @@ export class HotelServiceDetailsComponent implements OnInit {
     }
   }
 
-  get selectedItem(): any {
+  get selectedItem(): HotelServiceMasterDTOOrNull {
     return this._selectedItem;
   }
 
   @Output() cancel: EventEmitter<void> = new EventEmitter<void>();
 
   public isEdit: boolean = false;
-  private apiUrl: string = 'http://localhost:8080/api/v1/hotel-services';
   public form!: FormGroup;
 
   public faCancel: IconDefinition = faCancel;
   public faSave: IconDefinition = faSave;
   public faRotateLeft: IconDefinition = faRotateLeft;
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(
+    @Inject(HOTEL_SERVICE_SERVICE)
+    private hotelServiceService: IHotelServiceService
+  ) {}
 
   ngOnInit(): void {
     this.createForm();
     this.updatedForm();
   }
+
   updatedForm() {
     if (this.form && this.selectedItem) {
       this.form.patchValue(this.selectedItem);
@@ -95,9 +100,11 @@ export class HotelServiceDetailsComponent implements OnInit {
     const data = this.form.value;
 
     if (this.isEdit) {
-      this.httpClient
-        .put(`${this.apiUrl}/${this.selectedItem.id}`, data)
-        .subscribe((result: any) => {
+      Object.assign(data, { id: this.selectedItem?.id });
+
+      this.hotelServiceService
+        .update(data)
+        .subscribe((result: HotelServiceMasterDTO) => {
           if (result) {
             console.log('Update success');
             this.cancel.emit();
@@ -107,13 +114,16 @@ export class HotelServiceDetailsComponent implements OnInit {
         });
     } else {
       // Call API to create new hotel service
-      this.httpClient.post(this.apiUrl, data).subscribe((result: any) => {
-        console.log(result);
-        // Neu thanh cong thi dong form
-        if (result != null) {
-          this.cancel.emit();
-        }
-      });
+      this.hotelServiceService
+        .create(data)
+        .subscribe((result: HotelServiceMasterDTO) => {
+          console.log(result);
+
+          // Neu thanh cong thi dong form
+          if (result != null) {
+            this.cancel.emit();
+          }
+        });
     }
   }
 

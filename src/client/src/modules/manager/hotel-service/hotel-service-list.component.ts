@@ -20,6 +20,11 @@ import {
 import { TableComponent } from '../../../core/components/table/table.component';
 import { IHotelServiceService } from '../../../services/hotel-service/hotel-service.interface';
 import { HOTEL_SERVICE_SERVICE } from '../../../constants/injection.constant';
+import {
+  PageInfo,
+  SearchResponse,
+} from '../../../models/search-response.model';
+import { HotelServiceMasterDTO } from '../../../models/hotel-service/hotel-service-master-dto.model';
 
 @Component({
   selector: 'app-hotel-service-list',
@@ -36,7 +41,7 @@ import { HOTEL_SERVICE_SERVICE } from '../../../constants/injection.constant';
 })
 export class HotelServiceListComponent implements OnInit {
   public isShowDetails: boolean = false;
-  public selectedItem!: any;
+  public selectedItem!: HotelServiceMasterDTO | null | undefined;
 
   public faPlus: IconDefinition = faPlus;
   public faSearch: IconDefinition = faSearch;
@@ -48,10 +53,10 @@ export class HotelServiceListComponent implements OnInit {
   public pageLimit: number = 2;
   public currentPageNumber: number = 0;
   public currentPageSize: number = 10;
-  public pageInfo: any;
+  public pageInfo!: PageInfo;
 
   public searchForm!: FormGroup;
-  public data: any[] = [];
+  public data!: HotelServiceMasterDTO[];
 
   public configColumns: any[] = [
     { name: 'name', title: 'Service Name' },
@@ -75,12 +80,14 @@ export class HotelServiceListComponent implements OnInit {
       page: this.currentPageNumber,
       size: this.currentPageSize,
     };
-    this.hotelServiceService.search(params).subscribe((res: any) => {
-      // Chi assign res.data cho data
-      this.data = res.data;
-      // Update pagination properties
-      this.pageInfo = res.page;
-    });
+    this.hotelServiceService
+      .search(params)
+      .subscribe((res: SearchResponse<HotelServiceMasterDTO>) => {
+        // Chi assign res.data cho data
+        this.data = res.data;
+        // Update pagination properties
+        this.pageInfo = res.page;
+      });
   }
 
   private createForm(): void {
@@ -97,7 +104,7 @@ export class HotelServiceListComponent implements OnInit {
   }
 
   public onDelete(id: string): void {
-    this.hotelServiceService.delete(id).subscribe((result: any) => {
+    this.hotelServiceService.delete(id).subscribe((result: boolean) => {
       if (result) {
         this.search();
         console.log('Delete success');
@@ -124,7 +131,7 @@ export class HotelServiceListComponent implements OnInit {
   }
 
   // Pagination Methods
-  public onChangePageSize(pageSize: any): void {
+  public onChangePageSize(pageSize: number): void {
     this.currentPageSize = pageSize;
     this.search();
   }
