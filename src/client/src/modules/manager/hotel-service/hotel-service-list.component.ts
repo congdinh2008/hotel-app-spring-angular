@@ -46,8 +46,6 @@ export class HotelServiceListComponent implements OnInit {
 
   public faPlus: IconDefinition = faPlus;
   public faSearch: IconDefinition = faSearch;
-  public faEdit: IconDefinition = faEdit;
-  public faTrashCan: IconDefinition = faTrashCan;
 
   // Pagination Properties
   public pageSizeList: number[] = [10, 20, 50, 100];
@@ -76,7 +74,7 @@ export class HotelServiceListComponent implements OnInit {
   }
 
   private search(): void {
-    const params = {
+    const params: any = {
       keyword: this.searchForm.value.keyword,
       page: this.currentPageNumber,
       size: this.currentPageSize,

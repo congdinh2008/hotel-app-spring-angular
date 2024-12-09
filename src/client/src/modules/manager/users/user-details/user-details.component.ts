@@ -15,9 +15,13 @@ import {
   faSave,
   faRotateLeft,
 } from '@fortawesome/free-solid-svg-icons';
-import { ROLE_SERVICE, USER_SERVICE } from '../../../../constants/injection.constant';
+import {
+  USER_SERVICE,
+} from '../../../../constants/injection.constant';
 import { IUserService } from '../../../../services/user/user-service.interface';
+import { UserMasterDto } from '../../../../models/user/user-master-dto.model';
 
+type UserMasterDtoOrNull = UserMasterDto | null | undefined;
 @Component({
   selector: 'app-user-details',
   standalone: true,
@@ -26,9 +30,9 @@ import { IUserService } from '../../../../services/user/user-service.interface';
   styleUrl: './user-details.component.css',
 })
 export class UserDetailsComponent {
-  private _selectedItem!: any;
+  private _selectedItem!: UserMasterDtoOrNull;
 
-  @Input('selected-item') set selectedItem(value: any) {
+  @Input('selected-item') set selectedItem(value: UserMasterDtoOrNull) {
     if (value != null) {
       this._selectedItem = value;
       this.isEdit = true;
@@ -41,7 +45,7 @@ export class UserDetailsComponent {
     }
   }
 
-  get selectedItem(): any {
+  get selectedItem(): UserMasterDtoOrNull {
     return this._selectedItem;
   }
 
@@ -123,9 +127,9 @@ export class UserDetailsComponent {
     const data = this.form.value;
 
     if (this.isEdit) {
-      Object.assign(data, { id: this.selectedItem.id });
+      Object.assign(data, { id: this.selectedItem?.id });
 
-      this.userService.update(data).subscribe((result: any) => {
+      this.userService.update(data).subscribe((result: UserMasterDto) => {
         if (result) {
           console.log('Update success');
           this.cancel.emit();
@@ -134,7 +138,7 @@ export class UserDetailsComponent {
         }
       });
     } else {
-      this.userService.create(data).subscribe((result: any) => {
+      this.userService.create(data).subscribe((result: UserMasterDto) => {
         console.log(result);
         if (result != null) {
           this.cancel.emit();

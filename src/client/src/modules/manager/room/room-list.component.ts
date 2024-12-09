@@ -39,6 +39,9 @@ export class RoomListComponent {
   public isShowDetails: boolean = false;
   public selectedItem!: RoomMasterDto | null | undefined;
 
+  public faPlus: IconDefinition = faPlus;
+  public faSearch: IconDefinition = faSearch;
+  
   // Pagination Properties
   public pageSizeList: number[] = [10, 20, 50, 100];
   public pageLimit: number = 2;
@@ -46,14 +49,11 @@ export class RoomListComponent {
   public currentPageSize: number = 10;
   public pageInfo!: PageInfo;
 
-  public faPlus: IconDefinition = faPlus;
-  public faSearch: IconDefinition = faSearch;
-
   public searchForm!: FormGroup;
   public data: RoomMasterDto[] = [];
 
   public configColumns: TableColumn[] = [
-    { name: 'number', title: 'Number'},
+    { name: 'number', title: 'Number' },
     { name: 'capacity', title: 'Capacity' },
     { name: 'price', title: 'Price' },
     { name: 'type', title: 'Type' },
@@ -68,7 +68,7 @@ export class RoomListComponent {
   }
 
   public search(): void {
-    const params = {
+    const params: any = {
       keyword: this.searchForm.value.keyword,
       page: this.currentPageNumber,
       size: this.currentPageSize,

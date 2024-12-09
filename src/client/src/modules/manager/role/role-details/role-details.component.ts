@@ -18,7 +18,9 @@ import {
 import { ROLE_SERVICE } from '../../../../constants/injection.constant';
 import { IRoleService } from '../../../../services/role/role-service.interface';
 import { catchError, of } from 'rxjs';
+import { RoleMasterDto } from '../../../../models/role/role-master-dto.model';
 
+type RoleMasterDtoOrNull = RoleMasterDto | null | undefined;
 @Component({
   selector: 'app-role-details',
   standalone: true,
@@ -27,15 +29,9 @@ import { catchError, of } from 'rxjs';
   styleUrl: './role-details.component.css',
 })
 export class RoleDetailsComponent {
-  private _selectedItem!: any;
+  private _selectedItem!: RoleMasterDtoOrNull;
 
-  public roleTypeList: any[] = [
-    { id: 'Standard', name: 'Standard' },
-    { id: 'Deluxe', name: 'Deluxe' },
-    { id: 'Suite', name: 'Suite' },
-  ];
-
-  @Input('selected-item') set selectedItem(value: any) {
+  @Input('selected-item') set selectedItem(value: RoleMasterDtoOrNull) {
     if (value != null) {
       this._selectedItem = value;
       this.isEdit = true;
@@ -48,7 +44,7 @@ export class RoleDetailsComponent {
     }
   }
 
-  get selectedItem(): any {
+  get selectedItem(): RoleMasterDtoOrNull {
     return this._selectedItem;
   }
 
@@ -96,7 +92,7 @@ export class RoleDetailsComponent {
     const data = this.form.value;
 
     if (this.isEdit) {
-      Object.assign(data, { id: this.selectedItem.id });
+      Object.assign(data, { id: this.selectedItem?.id });
 
       // Co gang thuc thi API update
       this.roleService
@@ -109,7 +105,7 @@ export class RoleDetailsComponent {
           })
         )
         // Lang nghe ket qua tra ve
-        .subscribe((result: any) => {
+        .subscribe((result: RoleMasterDto) => {
           if (result) {
             console.log('Update success');
             this.cancel.emit();
@@ -118,7 +114,7 @@ export class RoleDetailsComponent {
           }
         });
     } else {
-      this.roleService.create(data).subscribe((result: any) => {
+      this.roleService.create(data).subscribe((result: RoleMasterDto) => {
         console.log(result);
         if (result != null) {
           this.cancel.emit();

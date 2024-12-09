@@ -13,8 +13,16 @@ import {
 import { faPlus, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { RoleDetailsComponent } from './role-details/role-details.component';
 import { TableComponent } from '../../../core/components/table/table.component';
-import { ROLE_SERVICE, ROOM_SERVICE } from '../../../constants/injection.constant';
+import {
+  ROLE_SERVICE,
+} from '../../../constants/injection.constant';
 import { IRoleService } from '../../../services/role/role-service.interface';
+import { RoleMasterDto } from '../../../models/role/role-master-dto.model';
+import {
+  PageInfo,
+  SearchResponse,
+} from '../../../models/search-response.model';
+import { TableColumn } from '../../../models/core/table/table-column.model';
 
 @Component({
   selector: 'app-role-list',
@@ -31,22 +39,22 @@ import { IRoleService } from '../../../services/role/role-service.interface';
 })
 export class RoleListComponent {
   public isShowDetails: boolean = false;
-  public selectedItem!: any;
+  public selectedItem!: RoleMasterDto | null | undefined;
 
   // Pagination Properties
   public pageSizeList: number[] = [10, 20, 50, 100];
   public pageLimit: number = 2;
   public currentPageNumber: number = 0;
   public currentPageSize: number = 10;
-  public pageInfo: any;
+  public pageInfo!: PageInfo;
 
   public faPlus: IconDefinition = faPlus;
   public faSearch: IconDefinition = faSearch;
 
   public searchForm!: FormGroup;
-  public data: any[] = [];
+  public data: RoleMasterDto[] = [];
 
-  public configColumns: any[] = [
+  public configColumns: TableColumn[] = [
     { name: 'name', title: 'Name' },
     { name: 'description', title: 'Description' },
     { name: 'active', title: 'Active' },
@@ -66,12 +74,14 @@ export class RoleListComponent {
       size: this.currentPageSize,
     };
 
-    this.roleService.search(params).subscribe((res: any) => {
-      // Chi assign res.data cho data
-      this.data = res.data;
-      // Update pagination properties
-      this.pageInfo = res.page;
-    });
+    this.roleService
+      .search(params)
+      .subscribe((res: SearchResponse<RoleMasterDto>) => {
+        // Chi assign res.data cho data
+        this.data = res.data;
+        // Update pagination properties
+        this.pageInfo = res.page;
+      });
   }
 
   private createForm(): void {
@@ -88,7 +98,7 @@ export class RoleListComponent {
   }
 
   public onDelete(id: string): void {
-    this.roleService.delete(id).subscribe((result: any) => {
+    this.roleService.delete(id).subscribe((result: boolean) => {
       if (result) {
         this.search();
         console.log('Delete success');
@@ -100,7 +110,7 @@ export class RoleListComponent {
 
   public onEdit(id: string): void {
     this.isShowDetails = false;
-    this.selectedItem = this.data.find((item: any) => item.id === id);
+    this.selectedItem = this.data.find((item: RoleMasterDto) => item.id === id);
     this.isShowDetails = true;
   }
 
@@ -115,7 +125,7 @@ export class RoleListComponent {
   }
 
   // Pagination Methods
-  public onChangePageSize(pageSize: any): void {
+  public onChangePageSize(pageSize: number): void {
     this.currentPageSize = pageSize;
     this.search();
   }
