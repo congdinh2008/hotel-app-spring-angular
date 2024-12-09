@@ -1,9 +1,26 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
-import { FontAwesomeModule, IconDefinition } from '@fortawesome/angular-fontawesome';
-import { faCancel, faSave, faRotateLeft } from '@fortawesome/free-solid-svg-icons';
+import { Component, EventEmitter, Inject, Input, Output } from '@angular/core';
+import {
+  FormGroup,
+  FormControl,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import {
+  FontAwesomeModule,
+  IconDefinition,
+} from '@fortawesome/angular-fontawesome';
+import {
+  faCancel,
+  faSave,
+  faRotateLeft,
+} from '@fortawesome/free-solid-svg-icons';
+import { RoomMasterDto } from '../../../../models/room/room-master-dto.model';
+import { ROOM_SERVICE } from '../../../../constants/injection.constant';
+import { IRoleService } from '../../../../services/role/role-service.interface';
+import { RoomType } from '../../../../models/room/room-type.model';
+
+type RoomMasterDtoOrNull = RoomMasterDto | null | undefined;
 
 @Component({
   selector: 'app-room-details',
@@ -13,15 +30,15 @@ import { faCancel, faSave, faRotateLeft } from '@fortawesome/free-solid-svg-icon
   styleUrl: './room-details.component.css',
 })
 export class RoomDetailsComponent {
-  private _selectedItem!: any;
+  private _selectedItem!: RoomMasterDtoOrNull;
 
-  public roomTypeList: any[] = [
+  public roomTypeList: RoomType[] = [
     { id: 'Standard', name: 'Standard' },
     { id: 'Deluxe', name: 'Deluxe' },
     { id: 'Suite', name: 'Suite' },
   ];
 
-  @Input('selected-item') set selectedItem(value: any) {
+  @Input('selected-item') set selectedItem(value: RoomMasterDtoOrNull) {
     if (value != null) {
       this._selectedItem = value;
       this.isEdit = true;
@@ -34,21 +51,20 @@ export class RoomDetailsComponent {
     }
   }
 
-  get selectedItem(): any {
+  get selectedItem(): RoomMasterDtoOrNull {
     return this._selectedItem;
   }
 
   @Output() cancel: EventEmitter<void> = new EventEmitter<void>();
 
   public isEdit: boolean = false;
-  private apiUrl: string = 'http://localhost:8080/api/v1/rooms';
   public form!: FormGroup;
 
   public faCancel: IconDefinition = faCancel;
   public faSave: IconDefinition = faSave;
   public faRotateLeft: IconDefinition = faRotateLeft;
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(@Inject(ROOM_SERVICE) private roomService: IRoleService) {}
 
   ngOnInit(): void {
     this.createForm();
@@ -88,18 +104,17 @@ export class RoomDetailsComponent {
     const data = this.form.value;
 
     if (this.isEdit) {
-      this.httpClient
-        .put(`${this.apiUrl}/${this.selectedItem.id}`, data)
-        .subscribe((result: any) => {
-          if (result) {
-            console.log('Update success');
-            this.cancel.emit();
-          } else {
-            console.log('Update failed');
-          }
-        });
+      Object.assign(data, { id: this.selectedItem?.id });
+      this.roomService.update(data).subscribe((result: RoomMasterDto) => {
+        if (result) {
+          console.log('Update success');
+          this.cancel.emit();
+        } else {
+          console.log('Update failed');
+        }
+      });
     } else {
-      this.httpClient.post(this.apiUrl, data).subscribe((result: any) => {
+      this.roomService.create(data).subscribe((result: RoomMasterDto) => {
         console.log(result);
         if (result != null) {
           this.cancel.emit();

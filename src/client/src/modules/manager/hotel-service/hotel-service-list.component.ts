@@ -25,6 +25,7 @@ import {
   SearchResponse,
 } from '../../../models/search-response.model';
 import { HotelServiceMasterDTO } from '../../../models/hotel-service/hotel-service-master-dto.model';
+import { TableColumn } from '../../../models/core/table/table-column.model';
 
 @Component({
   selector: 'app-hotel-service-list',
@@ -58,7 +59,7 @@ export class HotelServiceListComponent implements OnInit {
   public searchForm!: FormGroup;
   public data!: HotelServiceMasterDTO[];
 
-  public configColumns: any[] = [
+  public configColumns: TableColumn[] = [
     { name: 'name', title: 'Service Name' },
     { name: 'price', title: 'Price' },
     { name: 'active', title: 'Active' },

@@ -15,6 +15,12 @@ import { RoomDetailsComponent } from './room-details/room-details.component';
 import { TableComponent } from '../../../core/components/table/table.component';
 import { ROOM_SERVICE } from '../../../constants/injection.constant';
 import { IRoomService } from '../../../services/room/room-service.interface';
+import { RoomMasterDto } from '../../../models/room/room-master-dto.model';
+import {
+  PageInfo,
+  SearchResponse,
+} from '../../../models/search-response.model';
+import { TableColumn } from '../../../models/core/table/table-column.model';
 
 @Component({
   selector: 'app-room-list',
@@ -31,23 +37,23 @@ import { IRoomService } from '../../../services/room/room-service.interface';
 })
 export class RoomListComponent {
   public isShowDetails: boolean = false;
-  public selectedItem!: any;
+  public selectedItem!: RoomMasterDto | null | undefined;
 
   // Pagination Properties
   public pageSizeList: number[] = [10, 20, 50, 100];
   public pageLimit: number = 2;
   public currentPageNumber: number = 0;
   public currentPageSize: number = 10;
-  public pageInfo: any;
+  public pageInfo!: PageInfo;
 
   public faPlus: IconDefinition = faPlus;
   public faSearch: IconDefinition = faSearch;
 
   public searchForm!: FormGroup;
-  public data: any[] = [];
+  public data: RoomMasterDto[] = [];
 
-  public configColumns: any[] = [
-    { name: 'number', title: 'Number' },
+  public configColumns: TableColumn[] = [
+    { name: 'number', title: 'Number'},
     { name: 'capacity', title: 'Capacity' },
     { name: 'price', title: 'Price' },
     { name: 'type', title: 'Type' },
@@ -68,12 +74,14 @@ export class RoomListComponent {
       size: this.currentPageSize,
     };
 
-    this.roomService.search(params).subscribe((res: any) => {
-      // Chi assign res.data cho data
-      this.data = res.data;
-      // Update pagination properties
-      this.pageInfo = res.page;
-    });
+    this.roomService
+      .search(params)
+      .subscribe((res: SearchResponse<RoomMasterDto>) => {
+        // Chi assign res.data cho data
+        this.data = res.data;
+        // Update pagination properties
+        this.pageInfo = res.page;
+      });
   }
 
   private createForm(): void {
@@ -90,7 +98,7 @@ export class RoomListComponent {
   }
 
   public onDelete(id: string): void {
-    this.roomService.delete(id).subscribe((result: any) => {
+    this.roomService.delete(id).subscribe((result: boolean) => {
       if (result) {
         this.search();
         console.log('Delete success');
@@ -102,7 +110,7 @@ export class RoomListComponent {
 
   public onEdit(id: string): void {
     this.isShowDetails = false;
-    this.selectedItem = this.data.find((item: any) => item.id === id);
+    this.selectedItem = this.data.find((item: RoomMasterDto) => item.id === id);
     this.isShowDetails = true;
   }
 
@@ -117,7 +125,7 @@ export class RoomListComponent {
   }
 
   // Pagination Methods
-  public onChangePageSize(pageSize: any): void {
+  public onChangePageSize(pageSize: number): void {
     this.currentPageSize = pageSize;
     this.search();
   }
