@@ -43,7 +43,6 @@ export class LoginComponent {
   }
 
   public onSubmit(): void {
-    debugger;
     // Validate form
     if (this.form.invalid) {
       return;

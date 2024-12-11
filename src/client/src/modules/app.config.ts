@@ -7,12 +7,12 @@ import { AuthService } from '../services/auth/auth.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true }), 
+    provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(withFetch()),
     {
       provide: 'AUTH_SERVICE',
-      useClass: AuthService
-    }
-  ]
+      useClass: AuthService,
+    },
+  ],
 };
