@@ -58,9 +58,12 @@ public class AuthController {
         // Generate JWT token
         String accessToken = tokenService.generateToken(authentication);
 
+        var roles = authService.getUserRoles(loginRequestDTO.getUsername());
+
         // create response
         LoginResponseDTO loginResponseDTO = new LoginResponseDTO();
         loginResponseDTO.setAccessToken(accessToken);
+        loginResponseDTO.setRoles(roles);
 
         return ResponseEntity.ok(loginResponseDTO);
     }

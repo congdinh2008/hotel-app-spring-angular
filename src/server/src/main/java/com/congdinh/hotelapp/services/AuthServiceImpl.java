@@ -1,5 +1,6 @@
 package com.congdinh.hotelapp.services;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -73,6 +74,12 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
     @Override
     public boolean existsByUsername(String username) {
         return userRepository.existsByUsername(username);
+    }
+
+    @Override
+    public List<String> getUserRoles(String username) {
+        var user = userRepository.findByUsername(username);
+        return user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList());
     }
 
 }

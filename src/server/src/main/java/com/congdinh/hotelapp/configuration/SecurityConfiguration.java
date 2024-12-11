@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -52,11 +54,13 @@ public class SecurityConfiguration {
                 .addFilterBefore(corsFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JWTFilter(tokenService), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/api/v1/rooms/**").anonymous()
-                        .requestMatchers("/api/v1/users/**").anonymous()
-                        .requestMatchers("/api/v1/roles/**").anonymous()
-                        .requestMatchers("/api/v1/bookings/**").anonymous()
-                        .anyRequest().anonymous())
+                        .requestMatchers("/api/auth/**").permitAll() // Allow all
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll() // Allow all
+                        .requestMatchers("/api/v1/rooms/**").hasRole("Admin")
+                        .requestMatchers("/api/v1/roles/**").hasRole("Admin")
+                        .requestMatchers("/api/v1/users/**").hasRole("Admin")
+                        .requestMatchers("/api/v1/hotel-services/**").hasRole("Admin")
+                        .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults());
         return http.build();
     }
