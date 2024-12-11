@@ -10,6 +10,7 @@ import { RoleService } from '../../services/role/role.service';
 import { RoleListComponent } from './role/role-list.component';
 import { UserService } from '../../services/user/user.service';
 import { UserListComponent } from './users/user-list.component';
+import { AuthGuard } from '../../guards/authclass.guard';
 
 const routes: Routes = [
   {

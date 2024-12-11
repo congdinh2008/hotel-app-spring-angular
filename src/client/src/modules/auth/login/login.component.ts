@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IAuthService } from '../../../services/auth/auth-service.interface';
+import { AUTH_SERVICE } from '../../../constants/injection.constant';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +21,7 @@ export class LoginComponent {
 
   constructor(
     private router: Router,
-    @Inject('AUTH_SERVICE') private authService: IAuthService
+    @Inject(AUTH_SERVICE) private authService: IAuthService
   ) {}
 
   ngOnInit(): void {

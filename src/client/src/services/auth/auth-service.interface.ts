@@ -1,5 +1,8 @@
-import { Observable } from "rxjs";
+import { Observable } from 'rxjs';
 
 export interface IAuthService {
   login(model: any): Observable<any>;
+  isAuthenticated(): boolean;
+  getAccessToken(): string;
+  isManager(): boolean;
 }
