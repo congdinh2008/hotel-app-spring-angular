@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.congdinh.hotelapp.dtos.auth.RegisterRequestDTO;
+import com.congdinh.hotelapp.dtos.user.UserInformationDTO;
 import com.congdinh.hotelapp.entities.User;
 import com.congdinh.hotelapp.repositories.UserRepository;
 
@@ -77,9 +78,17 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
     }
 
     @Override
-    public List<String> getUserRoles(String username) {
+    public UserInformationDTO getUserInformationDTO(String username) {
         var user = userRepository.findByUsername(username);
-        return user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList());
+        var userInformationDTO = new UserInformationDTO();
+        userInformationDTO.setFirstName(user.getFirstName());
+        userInformationDTO.setLastName(user.getLastName());
+        userInformationDTO.setUsername(user.getUsername());
+        userInformationDTO.setDisplayName(user.getDisplayName());
+        userInformationDTO.setEmail(user.getEmail());
+        userInformationDTO.setPhoneNumber(user.getPhoneNumber());
+        var roles = user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toSet());
+        userInformationDTO.setRoles(roles);
+        return userInformationDTO;
     }
-
 }

@@ -16,6 +16,9 @@ public class User extends MasterEntityBase {
 
     @Column(columnDefinition = "NVARCHAR(50)")
     private String lastName;
+
+    @Transient
+    private String displayName;
     
     @Column(unique = true, nullable = false, columnDefinition = "VARCHAR(50)")
     private String username;
@@ -36,4 +39,8 @@ public class User extends MasterEntityBase {
         inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;
+
+    public String getDisplayName() {
+        return firstName + " " + lastName;
+    }
 }

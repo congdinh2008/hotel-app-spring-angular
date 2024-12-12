@@ -1,6 +1,6 @@
 package com.congdinh.hotelapp.dtos.auth;
 
-import java.util.List;
+import com.congdinh.hotelapp.dtos.user.UserInformationDTO;
 
 import lombok.*;
 
@@ -10,5 +10,5 @@ import lombok.*;
 @AllArgsConstructor
 public class LoginResponseDTO {
     private String accessToken;
-    private List<String> roles;
+    private UserInformationDTO user;
 }

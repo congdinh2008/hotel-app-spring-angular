@@ -60,7 +60,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/v1/roles/**").hasRole("Admin")
                         .requestMatchers("/api/v1/users/**").hasRole("Admin")
                         .requestMatchers("/api/v1/hotel-services/**").hasRole("Admin")
-                        .anyRequest().authenticated())
+                        .anyRequest().anonymous())
                 .httpBasic(Customizer.withDefaults());
         return http.build();
     }
