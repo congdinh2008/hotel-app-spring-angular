@@ -8,9 +8,11 @@ export class AuthService implements IAuthService {
   private apiUrl = 'http://localhost:8080/api/auth/login';
   private access_token!: string;
 
-  private authenticated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private authenticated: BehaviorSubject<boolean> =
+    new BehaviorSubject<boolean>(false);
 
-  public authenticated$: Observable<boolean> = this.authenticated.asObservable();
+  public authenticated$: Observable<boolean> =
+    this.authenticated.asObservable();
 
   constructor(private httpClient: HttpClient) {
     this.access_token = localStorage.getItem('access_token') || '';
@@ -51,6 +53,13 @@ export class AuthService implements IAuthService {
         // Update the authenticated subject to true => User is logged in
         this.authenticated.next(true);
       })
+    );
+  }
+
+  public register(model: any): Observable<any> {
+    return this.httpClient.post(
+      'http://localhost:8080/api/auth/register',
+      model
     );
   }
 }
