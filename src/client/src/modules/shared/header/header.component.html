@@ -20,11 +20,26 @@
   </nav>
   <!-- Profile Menu -->
   <ul class="profile-menu flex justify-between items-center">
-    <li class="nav-item">
-      <a [routerLink]="['/auth/login']" class="nav-link block p-4 hover:bg-blue-700">Login</a>
-    </li>
-    <li class="nav-item">
-      <a [routerLink]="['/auth/register']" class="nav-link block p-4 hover:bg-blue-700">Register</a>
-    </li>
+    <ng-container *ngIf="!isAuthenticated; else authenticated">
+      <ng-container *ngTemplateOutlet="notAuthenticated"></ng-container>
+    </ng-container>
   </ul>
 </header>
+
+<ng-template #notAuthenticated>
+  <li class="nav-item">
+    <a [routerLink]="['/auth/login']" class="nav-link block p-4 hover:bg-blue-700">Login</a>
+  </li>
+  <li class="nav-item">
+    <a [routerLink]="['/auth/register']" class="nav-link block p-4 hover:bg-blue-700">Register</a>
+  </li>
+</ng-template>
+
+<ng-template #authenticated>
+  <li class="nav-item">
+    <a [routerLink]="['/profile']" class="nav-link block p-4 hover:bg-blue-700">Profile</a>
+  </li>
+  <li class="nav-item">
+    <a (click)="logout()" class="nav-link block p-4 hover:bg-blue-700">Logout</a>
+  </li>
+</ng-template>

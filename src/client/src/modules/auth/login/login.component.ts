@@ -53,9 +53,7 @@ export class LoginComponent {
     const data = this.form.value;
     this.authService.login(data).subscribe((res) => {
       if (res) {
-        console.log(res);
-        
-        this.router.navigate(['/manager/role']);
+        this.router.navigate(['/']);
       }
     });
   }

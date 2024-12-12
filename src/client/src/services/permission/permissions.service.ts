@@ -11,6 +11,19 @@ export class PermissionsService implements IPermissionsService {
     private router: Router
   ) {}
 
+  isUnauthenticated(): boolean {
+    // Neu user da dang nhap => redirect ve trang chu
+    this.authService.isAuthenticated().subscribe((res) => {
+      if (res) {
+        this.router.navigate(['/']);
+        return false;
+      }
+      return true;
+    });
+    // Neu user chua dang nhap => cho phep truy cap
+    return true;
+  }
+
   canActivate(): boolean {
     if (this.authService.isAuthenticated()) {
       if (this.authService.isManager()) {
