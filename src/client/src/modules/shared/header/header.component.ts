@@ -13,6 +13,7 @@ import { IAuthService } from '../../../services/auth/auth-service.interface';
 })
 export class HeaderComponent {
   public isAuthenticated: boolean = false;
+  public userInformation: any;
 
   constructor(
     @Inject(AUTH_SERVICE) private authService: IAuthService,
@@ -20,6 +21,11 @@ export class HeaderComponent {
   ) {
     this.authService.isAuthenticated().subscribe((res) => {
       this.isAuthenticated = res;
+    });
+
+    // Lay thong tin user
+    this.authService.getUserInformation().subscribe((res: any) => {
+      this.userInformation = res;
     });
   }
 

@@ -7,4 +7,5 @@ export interface IAuthService {
   getAccessToken(): string;
   isManager(): boolean;
   logout(): void;
+  getUserInformation(): Observable<any>;
 }

@@ -37,7 +37,7 @@
 
 <ng-template #authenticated>
   <li class="nav-item">
-    <a [routerLink]="['/profile']" class="nav-link block p-4 hover:bg-blue-700">Profile</a>
+    <a [routerLink]="['/profile']" class="nav-link block p-4 hover:bg-blue-700">{{userInformation.displayName}}</a>
   </li>
   <li class="nav-item">
     <a (click)="logout()" class="nav-link block p-4 hover:bg-blue-700">Logout</a>
